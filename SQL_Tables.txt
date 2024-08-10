@@ -1,0 +1,66 @@
+Schema Name : ehs
+
+
+--
+ Create the database
+CREATE DATABASE ehs;
+
+-- Use the database
+USE ehs;
+
+-- Create Patients table
+CREATE TABLE Patients (
+    PatientID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DateOfBirth DATE,
+    Gender ENUM('Male', 'Female', 'Other'),
+    Address VARCHAR(255),
+    PhoneNumber VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+-- Create Doctors table
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Specialization VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+-- Create Appointments table
+CREATE TABLE Appointments (
+    AppointmentID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATETIME,
+    ReasonForVisit TEXT,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create MedicalRecords table
+CREATE TABLE MedicalRecords (
+    RecordID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    DateOfRecord DATE,
+    Diagnosis TEXT,
+    Treatment TEXT,
+    Medications TEXT,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create Billing table
+CREATE TABLE Billing (
+    BillID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    AppointmentID INT,
+    Amount DECIMAL(10, 2),
+    PaymentStatus ENUM('Paid', 'Unpaid'),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
+);
